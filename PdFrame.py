@@ -7,15 +7,25 @@ from sklearn.preprocessing import PolynomialFeatures
 from sklearn.pipeline import make_pipeline
 from sklearn.linear_model import Ridge
 from sklearn.ensemble import RandomForestRegressor
-import numpy as np
 from sklearn.metrics import r2_score
 
 
 def load_cars():
     print("Load cars")
-    for i in range(20,40):
+    for i in range(800,2400):
+        print()
+        print("Seite " + str(i))
+
         cars = cs.car_dicts(i, i)
-        pickle.dump(cars, open("car_depot/page" + str(i) + ".pickle", "wb"))
+        pickle.dump(cars, open("car_depot2/page" + str(i) + ".pickle", "wb"))
+
+def merge_cars():
+    cars = []
+    for i in range(21,2249):
+        cars_page = pickle.load(open("car_depot2/page" + str(i) + ".pickle", "rb"))
+        cars += cars_page
+
+    pickle.dump(cars, open("car_depot2/merged.pickle", "wb"))
 
 def reorer_df(df):
     neworder = [
@@ -380,7 +390,7 @@ def all_preis(df, good_columns):
         'verbrauch_stadt',
         'verbrauch_total',]
 
-#load_cars()
-ps_preis('marke_VW')
+merge_cars()
+#ps_preis('marke_VW')
 #df, good_columns = get_good_columns()
 #all_preis(df, good_columns)
