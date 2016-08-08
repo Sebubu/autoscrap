@@ -89,4 +89,4 @@ ENV/
 # Rope project settings
 .ropeproject
 
-car_depot2/merged.pickle
+car_depot/merged.pickle

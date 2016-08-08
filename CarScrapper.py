@@ -3,6 +3,8 @@ import urllib.request as urllib
 from urllib.request import Request
 from cached_property import cached_property
 import datetime
+import pickle
+
 main_address ="http://www.autoscout24.ch"
 
 headers = {'User-Agent': 'Mozilla/5.0'}
@@ -321,3 +323,20 @@ def car_dicts(start_page, end_page):
             print(str(int(percentage)) + "%")
             last_percentage = percentage
     return dicts
+
+def load_cars():
+    print("Load cars")
+    for i in range(800,2400):
+        print()
+        print("Seite " + str(i))
+
+        cars = car_dicts(i, i)
+        pickle.dump(cars, open("car_depot/page" + str(i) + ".pickle", "wb"))
+
+def merge_cars():
+    cars = []
+    for i in range(21,2249):
+        cars_page = pickle.load(open("car_depot/page" + str(i) + ".pickle", "rb"))
+        cars += cars_page
+
+    pickle.dump(cars, open("car_depot/merged.pickle", "wb"))

@@ -1,5 +1,4 @@
 import pandas as pd
-import CarScrapper as cs
 import pickle
 import matplotlib.pyplot as plt
 
@@ -10,22 +9,7 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import r2_score
 
 
-def load_cars():
-    print("Load cars")
-    for i in range(800,2400):
-        print()
-        print("Seite " + str(i))
 
-        cars = cs.car_dicts(i, i)
-        pickle.dump(cars, open("car_depot2/page" + str(i) + ".pickle", "wb"))
-
-def merge_cars():
-    cars = []
-    for i in range(21,2249):
-        cars_page = pickle.load(open("car_depot2/page" + str(i) + ".pickle", "rb"))
-        cars += cars_page
-
-    pickle.dump(cars, open("car_depot2/merged.pickle", "wb"))
 
 def reorer_df(df):
     neworder = [
@@ -390,7 +374,6 @@ def all_preis(df, good_columns):
         'verbrauch_stadt',
         'verbrauch_total',]
 
-merge_cars()
 #ps_preis('marke_VW')
 #df, good_columns = get_good_columns()
 #all_preis(df, good_columns)
