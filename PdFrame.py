@@ -1,13 +1,15 @@
 import pandas as pd
 import pickle
-import matplotlib.pyplot as plt
+
+#import matplotlib.pyplot as plt
+from ggplot import *
+
 
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.pipeline import make_pipeline
 from sklearn.linear_model import Ridge
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import r2_score
-
 
 
 
@@ -131,10 +133,6 @@ def reorer_df(df):
         'Aussenspiegel rechts und links beheizt, elektrisch verstell- / und einklappbar',
         'Aussenspiegel rechts und links beheizt und elektrisch verstellbar, asphärisch gewölbtes Spiegelglas',
         'Aktive Kopfstützen',
-
-
-
-
     ]
     for val in df.columns.tolist():
         if val not in neworder:
@@ -143,18 +141,18 @@ def reorer_df(df):
 
 
 def get_main_df():
-    cars = []
-    for i in range(1,40):
-        cars_page = pickle.load(open("car_depot/page" + str(i) + ".pickle", "rb"))
-        cars += cars_page
-
-    df = pd.DataFrame(cars)
+    print("Loading cars")
+    cars = pickle.load(open("car_depot/merged.pickle", "rb"))
+    print("loaded " + str(len(cars)) + " cars")
+    from random import shuffle
+    shuffle(cars)
+    df = pd.DataFrame(cars[:10000])
     df = reorer_df(df)
+    df = df[df.Zylinder != "2'000"]
     df.columns = [c.replace(' ', '_') for c in df.columns]
     return df
 
-def ps_preis(column):
-    df = get_main_df()
+def regressor_preis(df, column):
     df['Inverkehrsetzung'] = pd.to_datetime(df['Inverkehrsetzung'])
     df = df[(df.Inverkehrsetzung.dt.year > 2000) & (df.Inverkehrsetzung.dt.year < 2015)]
     df = df.sample(frac=1).reset_index(drop=True)
@@ -164,7 +162,7 @@ def ps_preis(column):
     test_count = 100
     train = rdf[:-test_count]
     test = rdf[-test_count:]
-    test = test.sort(column, ascending=True)
+    #test = test.sort(column, ascending=True)
     #test = test[(test.Leistung_in_PS < 450)]
     #Remove outliers
     #train = train[train.apply(lambda x: np.abs(x - x.mean()) / x.std() < 2.5).all(axis=1)]
@@ -182,7 +180,7 @@ def ps_preis(column):
 
 
 
-    plt.scatter(x_test, y_test, color='black')
+    #plt.scatter(x_test, y_test, color='black')
     # Plot outputs
     colors = [
         "green",
@@ -194,19 +192,20 @@ def ps_preis(column):
         "orange",
         'yellow',
               ]
-    start = 7
-    for degree in range(start,8):
-        color = colors[degree - start]
-        regr = make_pipeline(PolynomialFeatures(degree), Ridge())
-        regr.fit(x_train, y_train)
 
-        plt.plot(x_test, regr.predict(x_test), color=color,
-             linewidth=1, label="degree " + str(degree))
+    degree = 7
+    regr = make_pipeline(PolynomialFeatures(degree), Ridge())
+    regr.fit(x_train, y_train)
+    predict = regr.predict(x_test)
 
-    plt.legend()
-    plt.xlabel(column, fontsize=16)
-    plt.ylabel('Price (CHF)', fontsize=16)
-    plt.show()
+    print("ggplot")
+    #plt.plot(x_test, , color=color,
+    #linewidth=1, label="degree " + str(degree))
+
+    #plt.legend()
+    #plt.xlabel(column, fontsize=16)
+    #plt.ylabel('Price (CHF)', fontsize=16)
+    #plt.show()
 
 
 def to_dummy_var(df, column):
@@ -345,35 +344,11 @@ def all_preis(df, good_columns):
     plt.show()
     '''
 
-
-['vehid',
-        #'titel',
-        'Leistung_in_PS',
-        'Preis(chf)',
-        'Anhangelast(kg)',
-        'Antriebsart',
-        'Aussenfarbe',
-        'Energieeffizienz',
-        'Euro_Norm',
-        'Fahrzeugart',
-        'Getriebeart',
-        'Hubraum(ccm2)',
-        'Inverkehrsetzung',
-        'Kilometer',
-        'Leergewicht(kg)',
-        'Neupreis(chf)',
-        'Sitze',
-        'Treibstoff',
-        'Türen',
-        'Zylinder',
-        'co2emission(g/km)',
-        'klasse',
-        'marke',
-        'mfk',
-        'verbrauch_land',
-        'verbrauch_stadt',
-        'verbrauch_total',]
+#'Aussenfarbe_grau mét.', 'Aussenfarbe_grün mét.', 'Aussenfarbe_rot', 'Aussenfarbe_schwarz', 'Aussenfarbe_schwarz mét.', 'Aussenfarbe_silber mét.', 'Aussenfarbe_weiss'
+#df, good_columns = get_good_columns()
+#print(good_columns)
+#regressor_preis(df, 'Aussenfarbe_rot')
 
 #ps_preis('marke_VW')
-#df, good_columns = get_good_columns()
+
 #all_preis(df, good_columns)
