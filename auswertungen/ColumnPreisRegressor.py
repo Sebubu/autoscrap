@@ -7,7 +7,7 @@ from sklearn.metrics import r2_score
 import pandas as pd
 
 
-column = 'Leergewicht(kg)'
+column = 'inverkehrsetzung_jahr'
 
 
 df, good_columns = get_good_columns()

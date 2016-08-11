@@ -142,11 +142,11 @@ def reorer_df(df):
 
 def get_main_df():
     print("Loading cars")
-    cars = pickle.load(open("car_depot/merged.pickle", "rb"))
+    cars = pickle.load(open("../car_depot/merged.pickle", "rb"))
     print("loaded " + str(len(cars)) + " cars")
     from random import shuffle
     shuffle(cars)
-    df = pd.DataFrame(cars[:10000])
+    df = pd.DataFrame(cars[:30000])
     df = reorer_df(df)
     df = df[df.Zylinder != "2'000"]
     df.columns = [c.replace(' ', '_') for c in df.columns]

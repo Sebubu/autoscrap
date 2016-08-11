@@ -4,7 +4,7 @@ from bokeh.charts import Bar
 from PdFrame import get_good_columns
 import pandas as pd
 
-selector = "Euro_Norm_"
+selector = "Aussenfarbe_"
 
 df, good_columns = get_good_columns()
 columns = []
@@ -17,14 +17,18 @@ for col in df.columns.values:
 df['Inverkehrsetzung'] = pd.to_datetime(df['Inverkehrsetzung'])
 df = df[(df.Inverkehrsetzung.dt.year > 1995) & (df.Inverkehrsetzung.dt.year < 2014)]
 df = df.sample(frac=1).reset_index(drop=True)
+df = df[(df['Leistung_in_PS'] < 200)]
 
 x = []
 y = []
 for col in columns:
     rdf = df[[col,'Preis(chf)']].dropna().apply(pd.to_numeric)
     length = len(rdf[(rdf[col] == 1)])
-    x.append(col.split("_")[1])
-    y.append(rdf[(rdf[col] == 1)]['Preis(chf)'].mean())
+    if length > 70:
+        farbe = col.split("_")[1]
+        x.append(farbe)
+        y.append(rdf[(rdf[col] == 1)]['Preis(chf)'].mean())
+        print(farbe + ": " + str(length))
 
 
 
