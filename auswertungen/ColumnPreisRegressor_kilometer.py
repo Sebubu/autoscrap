@@ -7,7 +7,7 @@ from sklearn.metrics import r2_score
 import pandas as pd
 
 
-column = 'Leistung_in_PS'
+column = 'Kilometer'
 
 
 df, good_columns = get_good_columns()
@@ -66,15 +66,15 @@ for p in prediction:
 
 
 
-color = 'blue'
+color = 'red'
 
 output_file("lines_de.html")
 
 # create a new plot with a title and axis labels
-p = figure(title="Leistung - Preis", x_axis_label="Leistung in PS", y_axis_label='Verkaufspreis (CHF)', width=600, height=400)
+p = figure(title="Kilometer - Preis", x_axis_label="in 1000 Kilometer", y_axis_label='Verkaufspreis (CHF)', width=600, height=400)
 p.left[0].formatter.use_scientific = False
 
-p.line(x_test[column],p_list, line_width=4, line_color=color)
+p.line(x_test[column] / 1000,p_list, line_width=4, line_color=color)
 
 # show the results
 show(p)
@@ -82,13 +82,13 @@ show(p)
 output_file("lines_en.html")
 
 # create a new plot with a title and axis labels
-p = figure(title="Power - Price", x_axis_label="power in HP", y_axis_label='retail price (CHF)', width=600, height=400)
+p = figure(title="Kilometer- Price", x_axis_label="in 1000 kilometer", y_axis_label='retail price (CHF)', width=600, height=400)
 p.left[0].formatter.use_scientific = False
 
 # add a line renderer with legend and line thickness
 
 #p.circle(df[column]/ 1000, df['Preis(chf)'], legend="Temp.", size=1)
-p.line(x_test[column],p_list, line_width=4, line_color=color)
+p.line(x_test[column] / 1000,p_list, line_width=4, line_color=color)
 
 # show the results
 show(p)

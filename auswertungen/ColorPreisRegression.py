@@ -1,6 +1,7 @@
 from bokeh.plotting import figure, output_file, show
 from bokeh.charts import Bar
 
+
 from PdFrame import get_good_columns
 import pandas as pd
 
@@ -38,16 +39,22 @@ df = df.sort_values('values')
 print(df)
 
 
-output_file("lines.html")
-
+output_file("lines_de.html")
+from bokeh.palettes import brewer
+from bokeh.charts import color, marker
+palette = brewer["Blues"]
 # create a new plot with a title and axis labels
 #p = figure(title=selector + "-Preis Diagramm", x_axis_label=selector, y_axis_label='Preis(chf)', width=1200)
 from bokeh.charts.attributes import CatAttr
-p = Bar(df, label=CatAttr(columns=['names'], sort=False), values='values', width=1200, height=700)
+p = Bar(df, label=CatAttr(columns=['names'], sort=False), values='values', width=600, height=400, notebook=True, color='green', title="Farbe - Preis"
+        , xlabel="Farben", ylabel='Verkaufspreis')
 
-# add a line renderer with legend and line thickness
+# show the results
+show(p)
 
-#p.line(x_test[column],p_list, legend="Regression", line_width=2, line_color="red")
+output_file("lines_en.html")
+p = Bar(df, label=CatAttr(columns=['names'], sort=False), values='values', width=600, height=400, notebook=True, color='green', title="Color - Price"
+        , xlabel="colors", ylabel='retail price')
 
 # show the results
 show(p)

@@ -7,7 +7,7 @@ from sklearn.metrics import r2_score
 import pandas as pd
 
 
-column = 'Leistung_in_PS'
+column = 'verbrauch_stadt'
 
 
 df, good_columns = get_good_columns()
@@ -44,7 +44,7 @@ y_test = test[y_columns]
 best_fit = 1
 best_r2 = -100000
 best_regr = None
-for i in range(1,5):
+for i in range(1,7):
     regr = make_pipeline(PolynomialFeatures(i), Ridge())
     regr.fit(x_train, y_train)
     prediction = regr.predict(x_test)
@@ -66,12 +66,12 @@ for p in prediction:
 
 
 
-color = 'blue'
+color = 'orange'
 
 output_file("lines_de.html")
 
 # create a new plot with a title and axis labels
-p = figure(title="Leistung - Preis", x_axis_label="Leistung in PS", y_axis_label='Verkaufspreis (CHF)', width=600, height=400)
+p = figure(title="Verbrauch - Preis", x_axis_label="Verbrauch in Liter", y_axis_label='Verkaufspreis (CHF)', width=600, height=400)
 p.left[0].formatter.use_scientific = False
 
 p.line(x_test[column],p_list, line_width=4, line_color=color)
@@ -82,7 +82,7 @@ show(p)
 output_file("lines_en.html")
 
 # create a new plot with a title and axis labels
-p = figure(title="Power - Price", x_axis_label="power in HP", y_axis_label='retail price (CHF)', width=600, height=400)
+p = figure(title="Consumption - Price", x_axis_label="consumption in liter", y_axis_label='retail price (CHF)', width=600, height=400)
 p.left[0].formatter.use_scientific = False
 
 # add a line renderer with legend and line thickness

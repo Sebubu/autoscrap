@@ -146,7 +146,7 @@ def get_main_df():
     print("loaded " + str(len(cars)) + " cars")
     from random import shuffle
     shuffle(cars)
-    df = pd.DataFrame(cars[:30000])
+    df = pd.DataFrame(cars[:35000])
     df = reorer_df(df)
     df = df[df.Zylinder != "2'000"]
     df.columns = [c.replace(' ', '_') for c in df.columns]
